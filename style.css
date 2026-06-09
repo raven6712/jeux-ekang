@@ -1,0 +1,214 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   1. VARIABLES & RESET CONFIGURATION
+   ────────────────────────────────────────────────────────────────────────── */
+:root {
+    --brown:   #5C3317;
+    --gold:    #D4A843;
+    --cream:   #F5EDD8;
+    --wood-light: #C8913A;
+    --wood-mid:   #A0722A;
+    --hole-bg:    #3B1F0A;
+    --hole-inner: #2A1506;
+    --seed:    #8B4513;
+    --seed-hi: #D2691E;
+}
+
+*, *::before, *::after { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+body {
+    background: var(--brown);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    color: var(--cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    user-select: none;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   2. INTERFACE (HEADER, SCORES & STATUS)
+   ────────────────────────────────────────────────────────────────────────── */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--gold);
+}
+
+.scoreboard {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 18px;
+    align-items: center;
+}
+.player-score {
+    text-align: center;
+    background: rgba(0,0,0,0.25);
+    border-radius: 12px;
+    padding: 10px 22px;
+    border: 1px solid rgba(212,168,67,0.2);
+    min-width: 120px;
+}
+.player-score.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 18px rgba(212,168,67,0.35);
+}
+.player-score .seeds-count {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.status-bar {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    color: var(--gold);
+    margin-bottom: 16px;
+    border: 1px solid rgba(212,168,67,0.15);
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   3. STRUCTURE DU PLATEAU (BOARD & HOLES)
+   ────────────────────────────────────────────────────────────────────────── */
+.board-wrap {
+    background: linear-gradient(160deg, var(--wood-light), var(--wood-mid) 60%, #7A5020);
+    border-radius: 28px;
+    padding: 18px 20px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 620px;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 4px 0;
+}
+
+/* Une case du jeu de Songo */
+.hole {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #5A3010, var(--hole-bg) 55%, var(--hole-inner));
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 8px;
+    position: relative;
+}
+.hole.playable {
+    cursor: pointer;
+}
+.hole.playable:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px var(--gold);
+}
+
+.hole-num {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    color: rgba(245,237,216,0.3);
+}
+
+/* Les graines */
+.seed {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--seed-hi), var(--seed) 60%, #5C2A08);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+.seed-count {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.divider {
+    height: 3px;
+    background: rgba(0, 0, 0, 0.2);
+    margin: 10px 4px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   4. BOUTONS, MODALE & ANIMATIONS
+   ────────────────────────────────────────────────────────────────────────── */
+.controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+button {
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.btn-primary { background: var(--gold); color: #5C3317; }
+.btn-secondary { background: rgba(255,255,255,0.08); color: var(--cream); }
+
+/* Modale de fin */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.overlay.show { opacity: 1; pointer-events: all; }
+
+.modal {
+    background: linear-gradient(160deg, #6A3D1A, #3B1F0A);
+    border-radius: 20px;
+    padding: 36px;
+    text-align: center;
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid var(--gold);
+}
+
+/* Animation en cas de coup interdit */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+.board-wrap.shake {
+    animation: shake 0.4s ease-in-out;
+    border: 2px solid #e53e3e;
+}
+
+#confetti-canvas {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 200;
+}

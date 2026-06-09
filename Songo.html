@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Songo — Jeu de Semailles Ekang</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <header>
+        <h1>SONGO</h1>
+        <p>Jeu de semailles · Ekang · Cameroun</p>
+    </header>
+
+    <div class="scoreboard">
+        <div class="player-score" id="score-north">
+            <div class="label">Joueur</div>
+            <div class="name">Nord</div>
+            <div class="seeds-count" id="north-count">0 <span>graines</span></div>
+        </div>
+        <div class="vs-sep">vs</div>
+        <div class="player-score active" id="score-south">
+            <div class="label">Joueur</div>
+            <div class="name">Sud</div>
+            <div class="seeds-count" id="south-count">0 <span>graines</span></div>
+        </div>
+    </div>
+
+    <div class="status-bar" id="status">Cliquez sur une case de votre rangée pour jouer.</div>
+
+    <div class="board-wrap">
+        <div class="player-label" id="label-north">← Nord (cases 1→7) →</div>
+        <div class="row" id="row-north"></div> <div class="divider"></div>
+        <div class="row" id="row-south"></div> <div class="player-label active-label" id="label-south">← Sud (cases 7→1) → (à vous de jouer)</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn-primary" id="btn-new-game">Nouvelle partie</button>
+        <button class="btn-secondary" id="btn-rules">Règles</button>
+    </div>
+
+    <details class="rules-toggle">
+        <summary>Rappel des règles</summary>
+        <div class="rules-text">
+            <strong>Départ :</strong> 7 cases par camp, 5 graines chacune (70 total).<br>
+            <strong>Tour :</strong> Ramasser toutes les graines d'une de vos cases, les semer une à une de droite→gauche chez vous puis gauche→droite chez l'adversaire.<br>
+            <strong>Prise :</strong> Si la dernière graine tombe dans une case adverse contenant 1–3 graines → vous prenez tout (2–4 graines).<br>
+            <strong>Interdits :</strong> Interdit de vider complètement le camp adverse.<br>
+            <strong>Fin :</strong> Un joueur atteint 40 graines, ou moins de 10 graines restent sur le plateau.
+        </div>
+    </details>
+
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <h2 id="modal-title">Fin de partie !</h2>
+            <div class="final-scores">
+                <div class="fs-item"><div class="fs-name">Nord</div><div class="fs-val" id="final-north">0</div></div>
+                <div class="fs-item"><div class="fs-name">Sud</div><div class="fs-val" id="final-south">0</div></div>
+            </div>
+            <p id="modal-msg"></p>
+            <button class="btn-primary" id="btn-replay">Rejouer</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
